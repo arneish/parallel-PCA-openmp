@@ -15,6 +15,7 @@ Refer to respective files for furthur details.
 ```
 g++ -fopenmp lab2_io.c lab2_omp.c main_omp.c -o pca
 ```
+#### Command Line Arguments
 The program takes two command line arguments:
 - arg1: input filename (consist M, N and D)  
 - arg2: retention (percentage of information to be retained by PCA) 
@@ -34,3 +35,21 @@ Script `gen_testcase.py` generates testcases as per the parameters and output th
 ```
 python3 gen_testcase.py
 ```
+
+## Input Output Specifications
+#### Input dataset specifications
+- M : number of rows (samples) in input matrix D
+- N : number of columns (features) in input matrix D
+- D : input matrix, #elements in D is (M * N)
+
+The first line of the input file contains `M` followed by `N`. The second line contains elements of matrix `D`. All the values in one line are space separated.  
+
+#### Output Specification
+Your program should perform SVD and PCA on the given input and store the results in the variables given in the program. We will check the correctness by calling the funstions from the program. You should compute following matrices and values:  
+- U : M x M real matrix (to be computed by SVD)
+- SIGMA : M x N diagonal matrix of positive real numbers ( to be computed by SVD)
+- V_T : N x N real matrix (to be computed by SVD)
+- K : number of coulmns (features) in reduced matrix D_HAT
+- D_HAT : reduced matrix (to be computed by PCA)
+
+Refer to `lab2_omp.h` for more details. **Your program should not output anything on `stdout`.**  
