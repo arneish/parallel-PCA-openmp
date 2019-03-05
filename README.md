@@ -35,6 +35,7 @@ Script `gen_testcase.py` generates testcases as per the parameters and output th
 ```
 python3 gen_testcase.py
 ```
+Note: Since we are using single precision floating point numbers, changing the lower and upper range of matrix elements might result in approximated values in your program.
 
 ## Input Output Specifications
 #### Input dataset specifications
@@ -53,3 +54,11 @@ Your program should perform SVD and PCA on the given input and store the results
 - D_HAT : reduced matrix (to be computed by PCA)
 
 Refer to `lab2_omp.h` for more details. **Your program should not output anything on `stdout`.**  
+
+## Submission Instructions
+- You are supposed to submit only one file named `lab2_omp.c/cpp`. Please make sure all the functions you have used are in this file.
+- Do not submit other files
+- Your code should build and execute as per the instructions given above. Please make sure that your code doesn't need any Makefile.
+- Your program should not output anything in `stdout`
+
+We will not consider the submissions that don't comply with these guidelines.
