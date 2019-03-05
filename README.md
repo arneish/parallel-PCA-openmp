@@ -20,7 +20,7 @@ The program takes two command line arguments:
 - arg1: input filename (consist M, N and D)  
 - arg2: retention (percentage of information to be retained by PCA) 
 
-Note that retention precentage is integer.  Please refer to `main_omp.c` for more details.  
+Note that the retention percentage is integer.  Please refer to `main_omp.c` for more details.  
 To run the program:
 ```
 ./pca <input filename> <retention>
@@ -37,7 +37,7 @@ python3 gen_testcase.py
 ```
 Note: Since we are using single precision floating point numbers, changing the lower and upper range of matrix elements might result in approximated values in your program.
 
-## Input Output Specifications
+## Input-Output Specifications
 #### Input dataset specifications
 - M : number of rows (samples) in input matrix D
 - N : number of columns (features) in input matrix D
@@ -46,11 +46,11 @@ Note: Since we are using single precision floating point numbers, changing the l
 The first line of the input file contains `M` followed by `N`. The second line contains elements of matrix `D`. All the values in one line are space separated.  
 
 #### Output Specification
-Your program should perform SVD and PCA on the given input and store the results in the variables given in the program. We will check the correctness by calling the funstions from the program. You should compute following matrices and values:  
+Your program should perform SVD and PCA on the given input and store the results in the variables given in the program. We will check the correctness by calling the functions from the program. You should compute following matrices and values:  
 - U : M x M real matrix (to be computed by SVD)
 - SIGMA : M x N diagonal matrix of positive real numbers ( to be computed by SVD)
 - V_T : N x N real matrix (to be computed by SVD)
-- K : number of coulmns (features) in reduced matrix D_HAT
+- K : number of columns (features) in reduced matrix D_HAT
 - D_HAT : reduced matrix (to be computed by PCA)
 
 Refer to `lab2_omp.h` for more details. **Your program should not output anything on `stdout`.**  
@@ -59,6 +59,6 @@ Refer to `lab2_omp.h` for more details. **Your program should not output anythin
 - You are supposed to submit only one file named `lab2_omp.c/cpp`. Please make sure all the functions you have used are in this file.
 - Do not submit other files
 - Your code should build and execute as per the instructions given above. Please make sure that your code doesn't need any Makefile.
-- Your program should not output anything in `stdout`
+- Your program should not output anything in `stdout`.
 
 We will not consider the submissions that don't comply with these guidelines.
