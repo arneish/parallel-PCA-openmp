@@ -35,7 +35,6 @@ Script `gen_testcase.py` generates testcases as per the parameters and output th
 ```
 python3 gen_testcase.py
 ```
-Note: Since we are using single precision floating point numbers, changing the lower and upper range of matrix elements might result in approximated values in your program.
 
 ## Input-Output Specifications
 #### Input dataset specifications
