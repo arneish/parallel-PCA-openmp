@@ -13,7 +13,7 @@ Refer to respective files for furthur details.
 
 ## Building and Executing
 ```
-g++ -fopenmp lab2_io.c lab2_omp.c main_omp.c -o pca
+g++ -fopenmp -lm lab2_io.c lab2_omp.c main_omp.c -o pca
 ```
 #### Command Line Arguments
 The program takes two command line arguments:
