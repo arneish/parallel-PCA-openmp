@@ -39,19 +39,22 @@ Arguments:
         --------------------------------------------------------------------------------
         | V_T[0][0] | V_T[0][1] | ... | V_T[0][N-1] | V_T[1][0] | ...  | V_T[N-1][N-1] |
         --------------------------------------------------------------------------------
-*/
-void is_correct_SVD (int M, int N, float* D, float* U, float* SIGMA, float* V_T);
-
-/*
-check correctness of Principal Component Analysis
-Arguments:
-    M : number of rows (samples) in reduced matrix D_HAT
     K : number of coulmns (features) in reduced matrix D_HAT
     D_HAT : reduced matrix (computed by PCA) in row-major
         -------------------------------------------------------------------------------------
         | D_HAT[0][0] | D_HAT[0][1] | ... | D_HAT[0][K-1] | D_HAT[1][0] | ... | D[M-1][K-1] |
         -------------------------------------------------------------------------------------
+    computation_time : Time elapsed in computing SVD and PCA
 */
-void is_correct_PCA (int M, int K, float* D_HAT);
+
+void write_result (int M, 
+		int N, 
+		float* D, 
+		float* U, 
+		float* SIGMA, 
+		float* V_T,
+		int K, 
+		float* D_HAT,
+		double computation_time);
 
 #endif

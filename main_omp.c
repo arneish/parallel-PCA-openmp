@@ -37,7 +37,7 @@ int main(int argc, char const *argv[])
 	retention = atoi(argv[2]);	//retention = 90 means 90% of information should be retained
 
 	float start_time, end_time;
-	float computation_time;
+	double computation_time;
 
 	/*
 		-- Pre-defined function --
@@ -65,17 +65,14 @@ int main(int argc, char const *argv[])
 	PCA(retention, M, N, D, U, SIGMA, &D_HAT, &K);
 
 	end_time = omp_get_wtime();
+	computation_time = ((double) (end_time - start_time));
 	
 	/*
 		--Pre-defined functions --
 		checks for correctness of results computed by SVD and PCA
+		and outputs the results
 	*/
-	is_correct_SVD(M, N, D, U, SIGMA, V_T);
-	is_correct_PCA(M, K, D_HAT);
+	write_result(M, N, D, U, SIGMA, V_T, K, D_HAT, computation_time);
 
-
-	computation_time = ((float) (end_time - start_time));
-	printf("%lf \n", computation_time);
-	
 	return 0;
 }

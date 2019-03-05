@@ -14,7 +14,14 @@ void read_matrix (const char* input_filename, int* M, int* N, float** D){
 	fclose(fin);
 }
 
-void is_correct_SVD (int M, int N, float* D, float* U, float* SIGMA, float* V_T) {}
-
-void is_correct_PCA (int M, int K, float* D_HAT) {}
-
+void write_result (int M, 
+		int N, 
+		float* D, 
+		float* U, 
+		float* SIGMA, 
+		float* V_T,
+		int K, 
+		float* D_HAT,
+		double computation_time){
+	// Will contain output code
+}
