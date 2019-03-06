@@ -17,10 +17,10 @@
 #########################################################################
 
 
-from random import sample
+from random import uniform
 
-M = 3               # number of rows (samples) in input matrix D
-N = 5               # number of columns (features) in input matrix
+M = 10000           # number of rows (samples) in input matrix D
+N = 300             # number of columns (features) in input matrix
 lrange = -100000    # lrange <= element of matrix
 urange = 100000     # element of matrix <= urange
 
@@ -30,12 +30,11 @@ num_elements = M * N
 filename = 'testcase_' + str(M) + '_' + str(N)     #output filename
 file = open(filename, 'w')
 
-matrix = sample(range(lrange, urange), num_elements)
-
 # write size of matrix in first line of file
 file.write(str(M) + ' ' +str(N) + '\n')
+
 # write space separated matrix elements
-for num in matrix:
-    file.write(str(num) + ' ')
+for i in range(num_elements):
+    file.write(str(uniform(lrange, urange)) + ' ')
 
 file.close()
