@@ -50,9 +50,9 @@ int main(int argc, char const *argv[])
 	*/
 	read_matrix (argv[1], &M, &N, &D);
 
-	U = (float*) malloc(sizeof(float) * M*M);
-	SIGMA = (float*) malloc(sizeof(float) * M);
-	V_T = (float*) malloc(sizeof(float) * N*N);
+	U = (float*) malloc(sizeof(float) * N*N);
+	SIGMA = (float*) malloc(sizeof(float) * N);
+	V_T = (float*) malloc(sizeof(float) * M*M);
 
 	start_time = omp_get_wtime();
 	
