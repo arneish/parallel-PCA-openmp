@@ -12,19 +12,19 @@ Arguments:
         --------------------------------------------------------------------------------------
         | D[0][0] | D[0][1] | ... | D[0][N-1] | D[1][0] | ... | D[1][N-1] | ... | D[M-1][N-1] |
         --------------------------------------------------------------------------------------
-    U : 1D array of M x M real matrix in row-major (to be computed)
+    U : 1D array of N x N real matrix in row-major (to be computed)
         --------------------------------------------------------------------------------------
-        | U[0][0] | U[0][1] | ... | U[0][M-1] | U[1][0] | ... | U[1][M-1] | ... | U[M-1][M-1] |
+        | U[0][0] | U[0][1] | ... | U[0][N-1] | U[1][0] | ... | U[1][N-1] | ... | U[N-1][N-1] |
         --------------------------------------------------------------------------------------
-    SIGMA : 1D array of M x N diagonal matrix of positive real numbers (to be computed)
+    SIGMA : 1D array of N x M diagonal matrix of positive real numbers (to be computed)
         format: consists only digonal elements
-        #elements in SIGMA is M
+        #elements in SIGMA is N
         -------------------------------------------------------------------
-        | SIGMA[0][0] | SIGMA[1][1] | SIGMA[2][2] | ... | SIGMA[M-1][M-1] |
+        | SIGMA[0][0] | SIGMA[1][1] | SIGMA[2][2] | ... | SIGMA[N-1][N-1] |
         -------------------------------------------------------------------
-    V_T : 1D array of N x N real matrix in row-major (to be computed)
+    V_T : 1D array of M x M real matrix in row-major (to be computed)
         -------------------------------------------------------------------------------
-        | V_T[0][0] | V_T[0][1] | ... | V_T[0][N-1] | V_T[1][0] | ... | V_T[N-1][N-1] |
+        | V_T[0][0] | V_T[0][1] | ... | V_T[0][M-1] | V_T[1][0] | ... | V_T[M-1][M-1] |
         -------------------------------------------------------------------------------
 */
 void SVD(int M, int N, float* D, float** U, float** SIGMA, float** V_T);
@@ -41,15 +41,15 @@ Arguments:
         --------------------------------------------------------------------------------------
         | D[0][0] | D[0][1] | ... | D[0][N-1] | D[1][0] | ... | D[1][N-1] | ... | D[M-1][N-1] |
         --------------------------------------------------------------------------------------
-    U : 1D array of M x M real matrix in row-major (input)
+    U : 1D array of N x N real matrix in row-major (input)
         --------------------------------------------------------------------------------------
-        | U[0][0] | U[0][1] | ... | U[0][M-1] | U[1][0] | ... | U[1][M-1] | ... | U[M-1][M-1] |
+        | U[0][0] | U[0][1] | ... | U[0][N-1] | U[1][0] | ... | U[1][N-1] | ... | U[N-1][N-1] |
         --------------------------------------------------------------------------------------
-    SIGMA : 1D array of M x N diagonal matrix of positive real numbers (input)
+    SIGMA : 1D array of N x M diagonal matrix of positive real numbers (input)
         format: consists only digonal elements
-        #elements in SIGMA is M
+        #elements in SIGMA is N
         -------------------------------------------------------------------
-        | SIGMA[0][0] | SIGMA[1][1] | SIGMA[2][2] | ... | SIGMA[M-1][M-1] |
+        | SIGMA[0][0] | SIGMA[1][1] | SIGMA[2][2] | ... | SIGMA[N-1][N-1] |
         -------------------------------------------------------------------
     D_HAT : 1D array of reduced M x K real matrix in row-major (to be computed)
         -----------------------------------------------------------------------------------------
