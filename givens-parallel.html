@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!--Converted with LaTeX2HTML 99.2beta6 (1.42)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<html><head>
+<title>6.1.3 Givens rotation on a parallel computer</title>
+<meta name="description" content="6.1.3 Givens rotation on a parallel computer">
+<meta name="keywords" content="parvor">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="Generator" content="LaTeX2HTML v99.2beta6">
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<link rel="STYLESHEET" href="givens-parallel_files/parvor.css">
+
+<link rel="previous" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node117.html">
+<link rel="up" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node115.html">
+<link rel="next" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node119.html">
+</head>
+
+<body>
+<!--Navigation Panel-->
+<a name="tex2html1967" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node119.html">
+<img alt="next" src="givens-parallel_files/next.html" width="37" height="24" border="0" align="BOTTOM"></a> 
+<a name="tex2html1963" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node115.html">
+<img alt="up" src="givens-parallel_files/up.html" width="26" height="24" border="0" align="BOTTOM"></a> 
+<a name="tex2html1959" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node117.html">
+<img alt="previous" src="givens-parallel_files/prev.html" width="63" height="24" border="0" align="BOTTOM"></a> 
+<a name="tex2html1965" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node1.html">
+<img alt="contents" src="givens-parallel_files/contents.html" width="65" height="24" border="0" align="BOTTOM"></a>  
+<br>
+<b> Next:</b> <a name="tex2html1968" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node119.html">6.2 LU factorization</a>
+<b> Up:</b> <a name="tex2html1964" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node115.html">6.1 Elimination by rotation</a>
+<b> Previous:</b> <a name="tex2html1960" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node117.html">6.1.2 Givens rotation on</a>
+ &nbsp; <b>  <a name="tex2html1966" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node1.html">Contents</a></b> 
+<br>
+<br>
+<!--End of Navigation Panel-->
+
+<h2><a name="SECTION00813000000000000000"></a>
+<a name="kap6.1.3"></a>
+<br>
+6.1.3 Givens rotation on a parallel computer
+</h2>
+Denote by <img src="givens-parallel_files/img16.gif" alt="$ g(k,s)$" width="54" height="35" border="0" align="MIDDLE"> the Givens rotation of rows&nbsp;<img src="givens-parallel_files/img17.gif" alt="$ k-1$" width="45" height="32" border="0" align="MIDDLE"> and&nbsp;<img src="givens-parallel_files/img18.gif" alt="$ k$" width="13" height="16" border="0" align="BOTTOM"> in column&nbsp;<img src="givens-parallel_files/img19.gif" alt="$ s$" width="11" height="16" border="0" align="BOTTOM">&nbsp;. 
+<br>
+<img src="givens-parallel_files/img733.gif" alt="\begin{algorithmus}
+% latex2html id marker 26285
+\caption {$g(k,s)$\ - Givens ro...
+... \quad\qquad\quad a_{k,j} \,:=\, c a_{k,j} + h
+\end{eqnarray*}\end{algorithmus}" width="424" height="203" align="MIDDLE">
+<br>
+The following data dependencies occur&nbsp;:
+
+<p></p>
+<div align="CENTER"><a name="fig6.1"></a><a name="26517"></a>
+<table>
+<caption align="BOTTOM"><strong>Figure 6.1:</strong>
+Static data dependencies in the Givens rotation</caption>
+<tbody><tr><td><img src="givens-parallel_files/img734.gif" alt="\begin{figure}\unitlength0.09\textwidth
+\mbox{}\hfill
+\begin{picture}(8,5)(0,0....
+...e n$}}
+\put(7.4,2.8){\line(4,-1){1}}
+%
+\end{picture}\hfill\mbox{}
+\end{figure}" width="310" height="165" align="MIDDLE"></td></tr>
+</tbody></table>
+</div><p></p>
+
+<br>
+We transform the static data dependency in Fig.&nbsp;<a href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node118.html#fig6.1">6.1</a>  by means 
+of markers&nbsp;<img src="givens-parallel_files/img190.gif" alt="$ \ast$" width="12" height="16" border="0" align="BOTTOM"> into a <i>dynamic data flow chart</i> 
+with an arbitrary number of processors.  
+<br>
+<br>
+Let <img src="givens-parallel_files/img735.gif" alt="$ m(k,s)$" width="61" height="35" border="0" align="MIDDLE"> the number of markers for process&nbsp;<img src="givens-parallel_files/img16.gif" alt="$ g(k,s)$" width="54" height="35" border="0" align="MIDDLE">. 
+<br>
+<br><!-- MATH
+ $m(k,s) = 2$
+ -->
+<img src="givens-parallel_files/img736.gif" alt="$ m(k,s) = 2$" width="96" height="35" border="0" align="MIDDLE">  <!-- MATH
+ $\Longrightarrow$
+ -->
+<img src="givens-parallel_files/img34.gif" alt="$ \Longrightarrow$" width="33" height="16" border="0" align="BOTTOM">  process&nbsp;<img src="givens-parallel_files/img16.gif" alt="$ g(k,s)$" width="54" height="35" border="0" align="MIDDLE"> starts. 
+<br>
+<br>
+Initial values&nbsp;: 
+<table cellpadding="3">
+<tbody><tr><td align="LEFT"><!-- MATH
+ $m(n,1) := 2$
+ -->
+<img src="givens-parallel_files/img737.gif" alt="$ m(n,1) := 2$" width="103" height="35" border="0" align="MIDDLE"></td>
+<td align="LEFT">&nbsp;</td><td align="LEFT">&nbsp;</td>
+</tr>
+<tr><td align="LEFT"><!-- MATH
+ $m(k,1) := 1$
+ -->
+<img src="givens-parallel_files/img738.gif" alt="$ m(k,1) := 1$" width="101" height="35" border="0" align="MIDDLE"></td>
+<td align="LEFT">&nbsp;</td><td align="LEFT"><img src="givens-parallel_files/img739.gif" alt="$ k&lt;n$" width="50" height="32" border="0" align="MIDDLE"></td>
+</tr>
+<tr><td align="LEFT"><!-- MATH
+ $m(k,s) := 0$
+ -->
+<img src="givens-parallel_files/img740.gif" alt="$ m(k,s) := 0$" width="101" height="35" border="0" align="MIDDLE"></td>
+<td align="LEFT">&nbsp;</td><td align="LEFT"><img src="givens-parallel_files/img741.gif" alt="$ s&gt;1$" width="45" height="30" border="0" align="MIDDLE"></td>
+</tr>
+</tbody></table>
+<br>
+<br>
+On a <i>shared memory</i> computer,  we achieve the flow chart in Fig.&nbsp;<a href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node118.html#fig6.2">6.2</a>
+
+<p></p>
+<div align="CENTER"><a name="fig6.2"></a><a name="26558"></a>
+<table>
+<caption align="BOTTOM"><strong>Figure 6.2:</strong>
+Flow chart on a shared memory computer : Givens rotation</caption>
+<tbody><tr><td><img src="givens-parallel_files/img734.gif" alt="\begin{figure}\unitlength0.09\textwidth
+\mbox{}\hfill
+\begin{picture}(8,5)(0,0....
+...e n$}}
+\put(7.4,2.8){\line(4,-1){1}}
+%
+\end{picture}\hfill\mbox{}
+\end{figure}" width="310" height="165" align="MIDDLE"></td></tr>
+</tbody></table>
+</div><p></p>
+
+<br>
+The markers&nbsp;<img src="givens-parallel_files/img742.gif" alt="$ m(k-1,s)$" width="93" height="35" border="0" align="MIDDLE"> and&nbsp;<!-- MATH
+ $m(k+1,s+1)$
+ -->
+<img src="givens-parallel_files/img743.gif" alt="$ m(k+1,s+1)$" width="125" height="35" border="0" align="MIDDLE"> are incremented after 
+process&nbsp;<img src="givens-parallel_files/img16.gif" alt="$ g(k,s)$" width="54" height="35" border="0" align="MIDDLE"> has finished. 
+<br>
+<br>
+If the processors have only access on a part of the <i>distributed memory</i> 
+then we have to investigate the data dependencies between the processors. 
+Here, a rowise distribution of blocks of matrix&nbsp;<img src="givens-parallel_files/img303.gif" alt="$ A$" width="17" height="17" border="0" align="BOTTOM"> is preferred, see Fig.&nbsp;<a href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node116.html#form6.3">6.3</a>. 
+
+<p></p>
+<div align="CENTER"><a name="fig6.3"></a><a name="26604"></a>
+<table>
+<caption align="BOTTOM"><strong>Figure 6.3:</strong>
+Flow chart on a distributed memory computer: Givens rotation</caption>
+<tbody><tr><td><img src="givens-parallel_files/img744.gif" alt="\begin{figure}\unitlength0.09\textwidth
+\mbox{}\hfill
+\begin{picture}(8,5)(0,0....
+...0){3}} \put(5.5,0.5){\line(0,-1){0.5}}
+%
+\end{picture}\hfill\mbox{}
+\end{figure}" width="315" height="196" align="MIDDLE"></td></tr>
+</tbody></table>
+</div><p></p>
+
+<br><i>Remark :</i> A similar distribution of rows can also be uses in the 
+Gauß  elimination. 
+<br>
+<hr>
+<!--Navigation Panel-->
+<a name="tex2html1967" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node119.html">
+<img alt="next" src="givens-parallel_files/next.html" width="37" height="24" border="0" align="BOTTOM"></a> 
+<a name="tex2html1963" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node115.html">
+<img alt="up" src="givens-parallel_files/up.html" width="26" height="24" border="0" align="BOTTOM"></a> 
+<a name="tex2html1959" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node117.html">
+<img alt="previous" src="givens-parallel_files/prev.html" width="63" height="24" border="0" align="BOTTOM"></a> 
+<a name="tex2html1965" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node1.html">
+<img alt="contents" src="givens-parallel_files/contents.html" width="65" height="24" border="0" align="BOTTOM"></a>  
+<br>
+<b> Next:</b> <a name="tex2html1968" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node119.html">6.2 LU factorization</a>
+<b> Up:</b> <a name="tex2html1964" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node115.html">6.1 Elimination by rotation</a>
+<b> Previous:</b> <a name="tex2html1960" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node117.html">6.1.2 Givens rotation on</a>
+ &nbsp; <b>  <a name="tex2html1966" href="http://www.numa.uni-linz.ac.at/Staff/haase/parvor_e/node1.html">Contents</a></b> 
+<!--End of Navigation Panel-->
+<address>
+Gundolf Haase
+2000-03-20
+</address>
+
+
+</body></html>
