@@ -26,26 +26,20 @@
 //     // float fb = eigen_[*(const int*)b];
 //     // return (fa<fb)-(fa>fb);
 // }
-
-void multiply(float *M_1, int m1, int n1, float *M_2, int m2, int n2, float *result)
+float matrix_similarity(float *M_1, int m, int n, float *M_2)
 {
-    assert(n1 == m2);
-    float sum = 0.0;
-    int i, j, k;
-    for (i = 0; i < m1; i++)
+    float l2_diff=0.0;
+    for (int i=0; i<m; i++)
     {
-        for (j = 0; j < n2; j++)
+        for (int j=0; j<n; j++)
         {
-            for (k = 0; k < n1; k++)
-            {
-                sum += M_1[i * n1 + k] * M_2[k * n2 + j];
-            }
-            result[i * n2 + j] = sum;
-            sum = 0.0;
+            l2_diff+=(M_1[i*n+j]-M_2[i*n+j])*(M_1[i*n+j]-M_2[i*n+j]);
         }
     }
+    l2_diff = sqrtf(l2_diff);
+    //printf("L2-diff b/w D_T's: %f\n", l2_diff);
+    return l2_diff;
 }
-
 void transpose(float *M, int m, int n, float *M_T)
 {
     int i, j;
@@ -58,7 +52,30 @@ void transpose(float *M, int m, int n, float *M_T)
     }
 }
 
-float *initialize_identity(int size)
+void multiply(float *M_1, int m1, int n1, float *M_2, int m2, int n2, float *result)
+{
+    assert(n1 == m2);
+    float sum = 0.0;
+    //compute M_2_T:
+    float *M_2_T = (float *) malloc(sizeof(float)*n2*m2);
+    transpose(M_2, m2, n2, M_2_T);
+    int i, j, k;
+    for (i = 0; i < m1; i++)
+    {
+        for (j = 0; j < n2; j++)
+        {
+            for (k = 0; k < n1; k++)
+            {
+                sum += M_1[i * n1 + k] * M_2_T[j * m2 + k];
+            }
+            result[i * n2 + j] = sum;
+            sum = 0.0;
+        }
+    }
+    free(M_2_T);
+}
+
+float* initialize_identity(int size)
 {
     float *I = (float *)calloc(size * size, sizeof(float));
     for (int i = 0; i < size; i++)
@@ -149,23 +166,23 @@ void classicalGS(float *A_current, float *A_T, int P, float *Q_current, float *R
 void compute_V(float **SIGMA, float *D_T, float **U, float **V_T, int N, int P)
 {
     //V_T = INV-SIGMA * U_T * M
-    float *INV_SIGMA = (float *) calloc(N*P, sizeof(float)); //|=NXP
-    for (int i=0; i<P; i++)
+    float *INV_SIGMA = (float *)calloc(N * P, sizeof(float)); //|=NXP
+    for (int i = 0; i < P; i++)
     {
-        INV_SIGMA[i*P+i] = 1.0/((*SIGMA)[i]);
+        INV_SIGMA[i * P + i] = 1.0 / ((*SIGMA)[i]);
     }
     printf("\n inv-sigma:\n");
-    print_matrix(INV_SIGMA, N, P, 1);
-    float *U_T = (float *) malloc (sizeof(float)*P*P);
+    print_matrix(INV_SIGMA, N, P, 0);
+    float *U_T = (float *)malloc(sizeof(float) * P * P);
     transpose(*U, P, P, U_T);
     //first, multiply INV-SIGMA X U_T |=(NXP)
-    float *product = (float *) malloc(sizeof(float)*N*P);
+    float *product = (float *)malloc(sizeof(float) * N * P);
     multiply(INV_SIGMA, N, P, U_T, P, P, product);
     //now, multiply product X D_T |=(NXN)
     multiply(product, N, P, D_T, P, N, *V_T);
-    
+
     printf("\n compute_V:\n");
-    print_matrix(*V_T, N, N, 1);
+    print_matrix(*V_T, N, N, 0);
     free(INV_SIGMA);
     free(U_T);
     free(product);
@@ -200,55 +217,55 @@ void SVD(int N, int P, float *D, float **U, float **SIGMA, float **V_T)
     transpose(D, N, P, D_T);
     printf("Printing Matrix D_T:\n");
     print_matrix(D_T, P, N, 0);
-    float *A = (float *)calloc(N * N, sizeof(float));   //A=D*D_T|(NxN)
-    float *A_T = (float *)calloc(N * N, sizeof(float)); //A_T|(NXN)
-    multiply(D, N, P, D_T, P, N, A);
-    printf("Printing Matrix A=D_T*D|(NXN)\n");
-    print_matrix(A, N, N, 0);
+    float *A = (float *)calloc(P * P, sizeof(float));   //A=D_T*D|(PxP)
+    float *A_T = (float *)calloc(P * P, sizeof(float)); //A_T|(PXP)
+    multiply(D_T, P, N, D, N, P, A);
+    printf("Printing Matrix A=D_T*D|(PXP)\n");
+    print_matrix(A, P, P, 0);
 
     //begin QR-algorithm for A:
-    float *A_current = (float *)malloc(sizeof(float) * N * N);
-    memcpy(A_current, A, sizeof(float) * N * N); //NxN; initialised with A_0
-    float *E_current = initialize_identity(N);   //NXN; initialised to E_0
-    printf("Printing Matrix E_0|(NXN)\n");
-    print_matrix(E_current, N, N, 0);
+    float *A_current = (float *)malloc(sizeof(float) * P * P);
+    memcpy(A_current, A, sizeof(float) * P * P); //PxP; initialised with A_0
+    float *E_current = initialize_identity(P);   //PXP; initialised to E_0
+    printf("Printing Matrix E_0|(PXP)\n");
+    print_matrix(E_current, P, P, 0);
 
-    float *Q_ = (float *)malloc(sizeof(float) * N * N);
-    float *R_ = (float *)malloc(sizeof(float) * N * N);
+    float *Q_ = (float *)malloc(sizeof(float) * P * P);
+    float *R_ = (float *)malloc(sizeof(float) * P * P);
     float diff_norm;
     printf("\n");
     int iter = 0;
     do //convergence condition for QR-algorithm
     {
         printf("iter:%d\n", ++iter);
-        transpose(A_current, N, N, A_T);
-        classicalGS(A_current, A_T, N, Q_, R_);
-        float *A_next = (float *)malloc(sizeof(float) * N * N);
-        multiply(R_, N, N, Q_, N, N, A_next);
-        float *E_next = (float *)malloc(sizeof(float) * N * N);
-        multiply(E_current, N, N, Q_, N, N, E_next);
+        transpose(A_current, P, P, A_T);
+        classicalGS(A_current, A_T, P, Q_, R_);
+        float *A_next = (float *)malloc(sizeof(float) * P * P);
+        multiply(R_, P, P, Q_, P, P, A_next);
+        float *E_next = (float *)malloc(sizeof(float) * P * P);
+        multiply(E_current, P, P, Q_, P, P, E_next);
         fprintf(stderr, "A_current:\n");
-        print_matrix(A_current, N, N, 0);
+        print_matrix(A_current, P, P, 0);
         fprintf(stderr, "A_next:\n");
-        print_matrix(A_next, N, N, 0);
+        print_matrix(A_next, P, P, 0);
         fprintf(stderr, "E_current:\n");
-        print_matrix(E_current, N, N, 0);
+        print_matrix(E_current, P, P, 0);
         fprintf(stderr, "E_next:\n");
-        print_matrix(E_next, N, N, 0);
+        print_matrix(E_next, P, P, 0);
         diff_norm = l2_norm_diagonal_diff(A_next, A_current, P);
         free(A_current);
         free(E_current);
         A_current = A_next;
         E_current = E_next;
         printf("diff_norm: %f, tol:%f\n", diff_norm, TOLERANCE);
-    } while(iter<100); //(diff_norm > TOLERANCE);
-
+    } while (diff_norm > TOLERANCE);
+    
     //eigenvalues are diagonals of A_current
     float temp = FLT_MAX;
     printf("\nPrinting singular-values: ");
     for (int i = 0; i < P; i++)
     {
-        (*SIGMA)[i] = sqrtf(A_current[i * N + i]);
+        (*SIGMA)[i] = sqrtf(A_current[i * P + i]);
         if ((*SIGMA)[i] > temp)
         {
             printf("EXCEPTION!\n");
@@ -259,53 +276,51 @@ void SVD(int N, int P, float *D, float **U, float **SIGMA, float **V_T)
     }
     printf("\n");
     printf("\nE: ");
-    print_matrix(E_current, N, N, 1);
+    print_matrix(E_current, P, P, 0);
 
     //qsort(eigen_, P, sizeof(float), compare);
 
-    //eigenvectors matrix (V for D*D_T) is E_current
-    for (int i=0; i<N; i++)
+    //eigenvectors matrix (U for D_T*D) is E_current
+    for (int i = 0; i < P; i++)
     {
-        for (int j=0; j<N; j++)
+        for (int j = 0; j < P; j++)
         {
-            (*V_T)[j*N+i] = E_current[i*N+j];
+            (*U)[i * P + j] = E_current[i * P + j];
         }
     }
-    printf("\n V_T:\n");
-    print_matrix(*V_T, N, N, 1);
-    float *temp_sigma = (float *) calloc(P*N, sizeof(float));
-    for (int i =0; i<P; i++)
+    printf("\n U:\n");
+    print_matrix(*U, P, P, 0);
+    float *temp_sigma = (float *)calloc(P * N, sizeof(float));
+    for (int i = 0; i < P; i++)
     {
-        temp_sigma[i*N+i] = (*SIGMA)[i];
+        temp_sigma[i * N + i] = (*SIGMA)[i];
     }
     printf("\n SIGMA:\n");
-    print_matrix(temp_sigma, P, N, 1);
+    print_matrix(temp_sigma, P, N, 0);
 
-    exit(0);
     //compute V_T
     compute_V(SIGMA, D_T, U, V_T, N, P);
     printf("\n V_T:\n");
-    print_matrix(*V_T, N, N, 1);
+    print_matrix(*V_T, N, N, 0);
 
-    /*SVD verification*/   
+    /*SVD verification*/
     //D_T == U*SIGMA*V_T
-    float *temp_arr = (float *) malloc(sizeof(float)*P*P);
-    multiply(*U, P, P, temp_sigma, P, N, temp_arr); //U*SIGMA
-    multiply(temp_sigma, P, N, *V_T, N, N, temp_arr);//(U*SIGMA)*V_T [==A_0]
+    float *product_one = (float *)malloc(sizeof(float) * P * N);
+    multiply(*U, P, P, temp_sigma, P, N, product_one); //U*SIGMA
+    float *product_two = (float *)malloc(sizeof(float) * P * N);
+    multiply(product_one, P, N, *V_T, N, N, product_two); //(U*SIGMA)*V_T [==A_0]
+    free(product_one);
     printf("\nORIGINAL D_T:\n");
-    print_matrix(D_T, P, N, 1);
+    print_matrix(D_T, P, N, 0);
     printf("\nORIGINAL D:\n");
-    print_matrix(D, N, P, 1);
+    print_matrix(D, N, P, 0);
     printf("\nVERIFIED D_T:\n");
-    print_matrix(temp_arr, P, N, 1);
+    print_matrix(product_two, P, N, 0);
     printf("\n A0 = D_TXD: \n");
-    print_matrix(A, P, P, 1);
+    print_matrix(A, P, P, 0);
+    matrix_similarity(D_T, P, N, product_two);
     free(temp_sigma);
-    free(temp_arr);
-    // printf("Q:\n");
-    // print_matrix(Q_, P, P, 1);
-    // printf("R:\n");
-    // print_matrix(R_, P, P, 1);
+    free(product_two);
 }
 
 // /*
@@ -317,21 +332,23 @@ void PCA(int retention, int N, int P, float *D, float *U, float *SIGMA, float **
 {
     float sum_eigenvalues = 0.0;
     int i;
-    for (i=0; i<P; i++)
+    for (i = 0; i < P; i++)
     {
-        sum_eigenvalues+=SIGMA[i];
+        sum_eigenvalues += SIGMA[i];
     }
     *K = 0;
     float retention_ = 0.0;
     i = 0;
-    while ((retention_<retention) && (i<P))
+    while ((retention_ < retention) && (i < P))
     {
-        retention_+=SIGMA[i]/sum_eigenvalues;
+        printf("adding to retention: %f\n", SIGMA[i] / sum_eigenvalues);
+        retention_ += SIGMA[i] / sum_eigenvalues;
         (*K)++;
         i++;
     }
-    fprintf(stderr, "K: %f, retention_: %f\n", *K, retention_);
-    
-
-
+    fprintf(stderr, "K: %d, retention_: %f\n", *K, retention_);
+    *D_HAT = (float *)malloc(sizeof(float) * N * (*K));
+    multiply(D, N, P, U, P, *K, *D_HAT);
+    printf("PRINTING D_HAT:\n");
+    print_matrix(*D_HAT, N, *K, 0);
 }
