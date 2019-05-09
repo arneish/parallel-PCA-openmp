@@ -3,7 +3,8 @@
 - Primary source file: *lab2_omp.c*
 - **Algorithm:** Described in included problem statement docs, or refer to the Wikipedia article on the Method
 - I/O: I/O format can be understood from the included header files and sample testcase files.
-- Literature reference used included in repository. 
+- Literature reference used included in repository.
+- Wikipedia article on QR-decomposition: https://en.wikipedia.org/wiki/QR_decomposition
 - Assignment attempted as a part of coursework requirements in *COL380: Introduction to Parallel Programming and Distributed Computing (Sem-II, 2018-19)* (Instructor: Prof. Subodh V. Sharma) at Indian Institute of Technology (IIT), Delhi. 
 - The problem statement is included. The following sections describe the assignment submission requirements and how to use the starter codes.
 # col380_lab2_suite
