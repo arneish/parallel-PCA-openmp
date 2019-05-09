@@ -7,7 +7,7 @@
 - Wikipedia article on QR-decomposition: https://en.wikipedia.org/wiki/QR_decomposition
 - Assignment attempted as a part of coursework requirements in *COL380: Introduction to Parallel Programming and Distributed Computing (Sem-II, 2018-19)* (Instructor: Prof. Subodh V. Sharma) at Indian Institute of Technology (IIT), Delhi. 
 - The problem statement is included. The following sections describe the assignment submission requirements and how to use the starter codes.
-- Performance comments: Perhaps a strategy based on Givens-rotation-based QR-decomposition would enable a greater degree of parallelisation than the parallelised Modified-Gram-Schmidt-based implementation. It is recommended that Givens rotation be employed for a parallelized QR decomposition requirement.  
+- Performance comments: Perhaps a strategy based on Givens-rotation-based QR-decomposition would enable a greater degree of parallelisation than the parallelised Modified-Gram-Schmidt-based implementation. It is therefore recommended that Givens rotation be employed for a parallelized QR decomposition requirement.  
 
 # col380_lab2_suite
 
